@@ -19,7 +19,8 @@ class Server {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 res.end(`<p style="color: blue;">${this.message.greeting.replace('%1', name)} ${currentTime}</p>`);
             } else if (req.method === 'GET' && parsedUrl.pathname === '/writeFile/') {
-                const text = parsedUrl.query.text;
+                const rawQuery = req.url.split('?text=')[1];
+                const text = decodeURIComponent(rawQuery);
                 fs.appendFile('file.txt', text + '\n', 'utf8', (err) => {
                     if (err) {
                         res.writeHead(500, { 'Content-Type': 'text/plain' });
